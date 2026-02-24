@@ -1,13 +1,20 @@
 public class Customer {
-    private String name;
-    private Account account;
 
-    public Customer(String name, Account account){
+    private String id;
+    private String name;
+    private String address;
+    private PIN pin;
+
+    Customer(String id, String name, String address, String pin){
+        this.id = id;
         this.name = name;
-        this.account = account;
+        this.address = address;
+        this.pin = new PIN(pin);
     }
 
-    public String getName() { return name; }
-    public Account getAccount() { return account; }
+    public boolean login(String enteredPIN) { return pin.authenticate(enteredPIN); }
 
+    public void changePIN(String newPIN) { pin.changePIN(newPIN); }
+
+    public String getName() { return name; }
 }
