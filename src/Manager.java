@@ -4,6 +4,6 @@ public class Manager extends Employee{
     }
     @Override
     public void performDuties(){
-        System.out.println(getName() + "approves loan.");
+        System.out.println(getName() + " approves loan.");
     }
 }

@@ -94,6 +94,59 @@ public class Main {
 
         System.out.println(t.getSummary());
 
+        ///// Bank tester
+        System.out.println("\n--- Bank Test ---");
+
+        Bank bank = new Bank();
+        bank.bankName = "BEBank";
+
+        bank.addCustomer(customer);
+        bank.addAccount(checking);
+        bank.addAccount(loan);
+
+        Customer foundCustomer = bank.findCustomer(name);
+        if(foundCustomer != null){
+            System.out.println("Customer found: " + foundCustomer.getName());
+        } else {
+            System.out.println("Customer not found.");
+        }
+
+        Account foundAccount = bank.findAccount("CHK001");
+        if(foundAccount != null){
+            System.out.println("Account found: " + foundAccount.getAccountType());
+        } else {
+            System.out.println("Account not found.");
+        }
+
+        ///// Savings Account tester
+        System.out.println("\n--- Savings Account Test ---");
+
+        SavingsAccount savings = new SavingsAccount("SAV001", customer, 5000, 0.03);
+
+        System.out.println("Savings Balance: " + savings.getBalance());
+
+        savings.applyInterest();
+
+        System.out.println("After Interest Applied: " + savings.getBalance());
+
+        ///// Interest Calculator tester
+        System.out.println("\n--- Interest Calculator Test ---");
+
+        InterestCalculator calc = new InterestCalculator();
+
+        double simpleInterest = calc.computeSimple(5000, 0.05);
+        double compoundInterest = calc.computeCompound(5000, 0.05, 12);
+
+        System.out.println("Simple Interest: " + simpleInterest);
+        System.out.println("Compound Interest: " + compoundInterest);
+
+        ///// Manager tester
+        System.out.println("\n--- Manager Test ---");
+
+        Manager manager = new Manager("Michael");
+
+        manager.performDuties();
+
 
 
     }
