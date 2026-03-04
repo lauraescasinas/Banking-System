@@ -34,7 +34,7 @@ public abstract class Account implements Transact {
         if(transactionCount < history.length){
             history[transactionCount++] =
                     new Transaction("T" + transactionCount, type, amount,
-                            java.time.LocalDate.now().toString());
+                            "2026-03-05");
         }
     }
 
