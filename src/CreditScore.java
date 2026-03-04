@@ -15,10 +15,11 @@ public class CreditScore {
     }
 
     public boolean isEligibleForLoan() {
-        return score >= 600;
+        return score >= 500;
     }
 
     public int getScore() {
+        System.out.println("Current credit score: " + score);
         return score;
     }
 }

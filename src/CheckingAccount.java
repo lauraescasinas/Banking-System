@@ -19,14 +19,13 @@ public class CheckingAccount extends Account {
 
         if (amount <= availableMoney) {
             super.withdraw(amount);
+            if(amount > getBalance()){
+                getOwner().getCreditScore().decreaseScore(10);
+                System.out.println("Overdraft used. Credit score decreased.");
+            }
             System.out.println("Withdrawal successful");
         } else {
             System.out.println("Overdraft limit exceeded.");
         }
-    }
-
-    @Override
-    String getAccountType() {
-        return "Checking Account";
     }
 }

@@ -6,4 +6,8 @@ public class Manager extends Employee{
     public void performDuties(){
         System.out.println(getName() + " approves loan.");
     }
+
+    public boolean approveLoan(Customer customer){
+        return customer.getCreditScore().isEligibleForLoan();
+    }
 }

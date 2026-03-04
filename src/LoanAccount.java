@@ -4,10 +4,12 @@ public class LoanAccount extends Account implements Interest {
     private double interestRate;
     private int termMonths;
 
+    private InterestCalculator calculator = new InterestCalculator();
+
     public LoanAccount(String accNumber, Customer owner,
                        double loanAmount, double rate, int months) {
 
-        super(accNumber, owner, 0); // loans start with 0 balance
+        super(accNumber, owner, 0);
         this.loanAmount = loanAmount;
         this.interestRate = rate;
         this.termMonths = months;
@@ -15,7 +17,7 @@ public class LoanAccount extends Account implements Interest {
 
     @Override
     public double calculateInterest() {
-        return loanAmount * interestRate;
+        return calculator.computeCompound(loanAmount, interestRate, termMonths);
     }
 
     @Override
@@ -26,7 +28,10 @@ public class LoanAccount extends Account implements Interest {
     public void makePayment(double amount) {
         if (amount > 0) {
             loanAmount -= amount;
-            System.out.println("Payment successful.");
+            getOwner().getCreditScore().increaseScore(15);
+            System.out.println("Payment successful. Credit score increased.");
+        } else{
+            getOwner().getCreditScore().decreaseScore(10);
         }
     }
 
@@ -34,8 +39,4 @@ public class LoanAccount extends Account implements Interest {
         return loanAmount;
     }
 
-    @Override
-    String getAccountType() {
-        return "Loan Account";
-    }
 }

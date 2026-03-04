@@ -7,6 +7,8 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+        Bank bank = new Bank();
+        bank.bankName = "BEBank";
 
         System.out.println("===Welcome to BEBank!===\n");
 
@@ -44,108 +46,86 @@ public class Main {
             System.out.println("PIN changed successfully.");
         }
 
-        ///// CheckingAccount and LoanAccount tester
-        System.out.println("\n--- Creating Accounts ---");
+        CheckingAccount checking =
+                new CheckingAccount("CHK001", customer, 5000, 1000);
 
-        CheckingAccount checking = new CheckingAccount("CHK001", customer, 1000, 500);
-
-        LoanAccount loan = new LoanAccount("LOAN001", customer, 10000, 0.05, 12);
-
-        System.out.println("Checking Account created with balance: "
-                + checking.getBalance());
-
-        System.out.println("Loan Account created with loan: "
-                + loan.getRemainingLoan());
-
-        ///// Teller tester
-        System.out.println("\n--- Teller Transactions ---");
-
-        Teller teller = new Teller("Anna");
-        teller.performDuties();
-
-        teller.deposit(checking, 300);
-        teller.withdraw(checking, 200);
-
-
-        ///// Interest / loan tester
-        System.out.println("Checking Balance: " + checking.getBalance());
-
-        System.out.println("\n--- Loan Interest + Payment ---");
-
-        loan.applyInterest();
-        System.out.println("After interest: " + loan.getRemainingLoan());
-
-        loan.makePayment(2000);
-        System.out.println("After payment: " + loan.getRemainingLoan());
-
-        ///// Credit score tester
-        System.out.println("\n--- Credit Score Test ---");
-
-        CreditScore score = new CreditScore(650);
-
-        System.out.println("Credit Score: " + score.getScore());
-        System.out.println("Loan Eligible? " + score.isEligibleForLoan());
-
-        ///// Transaction tester
-        System.out.println("\n--- Transaction Record ---");
-
-        Transaction t =
-                new Transaction("T001", "Deposit", 300, "2026-02-28");
-
-        System.out.println(t.getSummary());
-
-        ///// Bank tester
-        System.out.println("\n--- Bank Test ---");
-
-        Bank bank = new Bank();
-        bank.bankName = "BEBank";
-
-        bank.addCustomer(customer);
         bank.addAccount(checking);
+
+        SavingsAccount savings =
+                new SavingsAccount("SAV001", customer, 8000, 0.03);
+
+        bank.addAccount(savings);
+
+
+        // loan request
+        System.out.print("\nLoan amount: ");
+        double loanAmt = sc.nextDouble();
+
+        System.out.print("Loan term (months): ");
+        int months = sc.nextInt();
+
+        LoanAccount loan =
+                new LoanAccount("LOAN001", customer, loanAmt, 0.05, months);
+
         bank.addAccount(loan);
 
-        Customer foundCustomer = bank.findCustomer(name);
-        if(foundCustomer != null){
-            System.out.println("Customer found: " + foundCustomer.getName());
-        } else {
-            System.out.println("Customer not found.");
-        }
 
-        Account foundAccount = bank.findAccount("CHK001");
-        if(foundAccount != null){
-            System.out.println("Account found: " + foundAccount.getAccountType());
-        } else {
-            System.out.println("Account not found.");
-        }
+        //desposit & withdraw
+        Teller teller = new Teller("Anna", bank);
 
-        ///// Savings Account tester
-        System.out.println("\n--- Savings Account Test ---");
+        System.out.println("\n--- Teller Services ---");
 
-        SavingsAccount savings = new SavingsAccount("SAV001", customer, 5000, 0.03);
+        System.out.print("Deposit to account: ");
+        double dep = sc.nextDouble();
+        teller.deposit("CHK001", dep);
 
-        System.out.println("Savings Balance: " + savings.getBalance());
+        System.out.print("Withdraw from account: ");
+        double wd = sc.nextDouble();
+        teller.withdraw("CHK001", wd);
 
-        savings.applyInterest();
+        System.out.println("Checking balance: " + checking.getBalance());
 
-        System.out.println("After Interest Applied: " + savings.getBalance());
 
-        ///// Interest Calculator tester
-        System.out.println("\n--- Interest Calculator Test ---");
+        // interest
+        System.out.println("\n--- Applying Interest ---");
 
-        InterestCalculator calc = new InterestCalculator();
+        bank.applyInterestToAll();
 
-        double simpleInterest = calc.computeSimple(5000, 0.05);
-        double compoundInterest = calc.computeCompound(5000, 0.05, 12);
+        System.out.println("Savings after interest: " + savings.getBalance());
+        System.out.printf("Loan after interest: %.2f\n", loan.getRemainingLoan());
 
-        System.out.println("Simple Interest: " + simpleInterest);
-        System.out.println("Compound Interest: " + compoundInterest);
 
-        ///// Manager tester
-        System.out.println("\n--- Manager Test ---");
+        //loan payment
+        System.out.print("\nEnter loan payment amount: ");
+        double payment = sc.nextDouble();
+        loan.makePayment(payment);
+
+        System.out.printf("Remaining loan: %.2f\n", loan.getRemainingLoan());
+
+
+        // credit score
+        System.out.println("\n--- Credit Score Check ---");
 
         Manager manager = new Manager("Michael");
 
         manager.performDuties();
+        customer.getCreditScore().getScore();
+
+        if(manager.approveLoan(customer)){
+            System.out.println("Loan Approved!");
+        } else {
+            System.out.println("Loan Denied.");
+        }
+
+
+        // transaction
+        System.out.println("\n--- Checking Transaction History ---");
+        checking.printTransactions();
+
+        sc.close();
+
+        System.out.println("\n=== Thank you for using BEBank ===");
+
 
 
 
